@@ -5,12 +5,20 @@
 import os
 import sys
 import time
+import ConfigParser
+import subprocess
 
-server1_name = "yingjunw@dev1.db.pdl.cmu.local"
-server2_name = "yingjunw@dev2.db.pdl.cmu.local"
 
-oltp_home = "~/rxian/oltpbench"
-peloton_bin = "~/rxian/bin/bin"
+# Config the host and port of Peloton
+config = ConfigParser.ConfigParser()
+config.readfp(open('testbed.conf'))
+
+PELOTON_BIN = config.get("peloton", "PELOTON_BIN") + "/bin"
+PELOTON_HOST = config.get("peloton", "PELOTON_HOST")
+PELOTON_PORT = "57721"
+
+cwd = os.getcwd()
+OLTP_HOME = "%s/oltpbench" % (cwd)
 
 parameters = {
 "$IP":  "localhost",
@@ -26,13 +34,13 @@ parameters = {
 "$RMW_RATIO": "0"
 }
 
-cwd = os.getcwd()
-config_filename = "peloton_ycsb_config.xml"
 start_cleanup_script = "rm -rf callgrind.out.*"
-start_peloton_valgrind_script = "valgrind --tool=callgrind --trace-children=yes %s/peloton -D ./data > /dev/null 2>&1 &" % (peloton_bin)
-start_peloton_script = "%s/peloton -D ./data > /dev/null 2>&1 &" % (peloton_bin)
-stop_peloton_script = "%s/pg_ctl -D ./data stop" % (peloton_bin)
-start_ycsb_bench_script = "%s/oltpbenchmark -b ycsb -c " % (oltp_home) + cwd + "/" + config_filename + " --create=true --load=true --execute=true -s 5 -o %s/outputfile" % (cwd)
+start_peloton_valgrind_script = "valgrind --tool=callgrind --trace-children=yes %s/peloton -D ./data > /dev/null 2>&1 &" % (PELOTON_BIN)
+start_peloton_script = "%s/peloton -D ./data > /dev/null 2>&1 &" % (PELOTON_BIN)
+stop_peloton_script = "%s/pg_ctl -D ./data stop" % (PELOTON_BIN)
+
+config_filename = "peloton_ycsb_config.xml"
+start_ycsb_bench_script = "%s/oltpbenchmark -b ycsb -c " % (OLTP_HOME) + cwd + "/" + config_filename + " --create=true --load=true --execute=true -s 5 -o %s/outputfile" % (cwd)
 
 def prepare_parameters(thread_num, read_ratio, insert_ratio, update_ratio):
     os.chdir(cwd)
@@ -64,9 +72,10 @@ def start_peloton():
 
 def start_bench(thread_num, read_ratio, insert_ratio, update_ratio):
     # go to oltpbench directory
-    os.chdir(os.path.expanduser(oltp_home))
-    os.system(start_ycsb_bench_script + "_t" + str(thread_num) + "_" + str(read_ratio) + "_" + str(insert_ratio) + "_" + str(update_ratio))
-    time.sleep(2)
+    os.chdir(os.path.expanduser(OLTP_HOME))
+    cmd = start_ycsb_bench_script + "_t" + str(thread_num) + "_" + str(read_ratio) + "_" + str(insert_ratio) + "_" + str(update_ratio)
+    process = subprocess.Popen(cmd, shell=True)
+    process.wait()
 
 def stop_peloton():
     # go back to cwd
@@ -75,10 +84,11 @@ def stop_peloton():
 
 def collect_data(thread_num, read_ratio, insert_ratio, update_ratio):
     os.chdir(cwd)
-    dir_name = "collected_data_t" + str(thread_num) + "_" + str(read_ratio) + "_" + str(insert_ratio) + "_" + str(update_ratio)
+    dir_name = "ycsb_collected_data_t" + str(thread_num) + "_" + str(read_ratio) + "_" + str(insert_ratio) + "_" + str(update_ratio)
     os.system("rm -rf " + dir_name)
     os.system("mkdir " + dir_name)
     os.system("mv callgrind.out.* " + dir_name)
+    os.system("mv outputfile_t%d_%d_%d_%d.* %s/" % (thread_num, read_ratio, insert_ratio, update_ratio, dir_name))
 
 if __name__ == "__main__":
     read_ratio = 0
@@ -89,4 +99,6 @@ if __name__ == "__main__":
     thread_num = 3
     prepare_parameters(thread_num, read_ratio, insert_ratio, update_ratio)
     start_bench(thread_num, read_ratio, insert_ratio, update_ratio)
+    time.sleep(10)
+    collect_data(thread_num, read_ratio, insert_ratio, update_ratio)
     stop_peloton()

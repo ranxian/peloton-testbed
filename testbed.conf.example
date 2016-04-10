@@ -1,0 +1,7 @@
+# The repository of peloton source code
+PELOTON_SRC=~/peloton
+# The directory to put all the built binaries, you should configure peloton like
+# ../configure --prefix=~/ it will install peloton to ~/bin ~/lib and ~/share
+PELOTON_BIN=~/
+# Branch of the peloton source code
+PELOTON_BRANCH=master
