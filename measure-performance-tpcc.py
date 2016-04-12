@@ -112,21 +112,31 @@ def bootstrap_peloton():
 
 if __name__ == "__main__":
     scheme = "OPTIMISTIC"
-    new_order_ratio = 100
-    thread_num = 20
+
+    # 45:43:4:4:4
+    # thread_num = 20
+    # new_order_ratio = 50
+    # payment_ratio = 50
+    # order_status_ratio = 0
+    # delivery_ratio = 0
+    # stock_level_ratio = 0
     # bootstrap_peloton()
-    prepare_parameters()
-    start_bench()
-    collect_data()
-    stop_peloton()
-    # for scheme in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
-    #   for contention in [0.0]:#, 0.1, 0.5, 0.99]:
-    #     for read_ratio in [0]:#, 30, 50, 70, 100]:
-    #       for thread_num in range(20, 20+1):
-    #         insert_ratio = 0
-    #         update_ratio = 100 - read_ratio
-    #         bootstrap_peloton()
-    #         prepare_parameters()
-    #         start_bench()
-    #         collect_data()
-    #         stop_peloton()
+    # prepare_parameters()
+    # start_bench()
+    # collect_data()
+    # stop_peloton()
+
+    for scheme in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
+        for setting in [(100, 0), (50, 50)]:
+            new_order_ratio, payment_ratio = setting
+            order_status_ratio = 0
+            delivery_ratio = 0
+            stock_level_ratio = 0
+
+            thread_num = 20
+
+            bootstrap_peloton()
+            prepare_parameters()
+            start_bench()
+            collect_data()
+            stop_peloton()
