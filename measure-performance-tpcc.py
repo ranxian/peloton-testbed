@@ -89,6 +89,7 @@ def start_peloton_valgrind():
 def start_bench():
     # go to oltpbench directory
     os.chdir(os.path.expanduser(OLTP_HOME))
+    call("ant clean", shell=True)
     call("ant", shell=True)
     cmd = start_benchmark_script + get_result_path()
     process = subprocess.Popen(cmd, shell=True)
