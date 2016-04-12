@@ -9,11 +9,12 @@
 
 After Peloton is properly configured, you no longer need to do it again.
 
-### Build and Run Peloton
-
-run `bash bootstrap.sh`
-
 ### Run YCSB Benchmark
 
-1. edit `mesure_performance_ycsb.py`, modify the workload characteristics in the `__main__` part
-2. run `python measure_performance_ycsb.py`, you must have completed *Prepare Peloton* and *Build and Run Peloton*. Each time you run this script you should run `bash bootstrap.sh`
+1. edit `mesure_performance_ycsb.py`, modify the workload settings in the `__main__` part
+2. Run `python measure_performance_ycsb.py`, you must first complete *Prepare Peloton* step.
+
+### Run TPC-C Benchmark
+
+1. edit `measure_performance_tpcc.py`, modify the workload settings in the `__main__` part
+2. Run `python measure_performance_tpcc.py`, you must first complete *Prepare Peloton* step.
