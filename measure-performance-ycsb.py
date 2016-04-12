@@ -116,20 +116,20 @@ def bootstrap_peloton():
 # Cont: 0, 0.1, 0.3, 0.5, 0.9, 0.99
 # Thr: 1-12
 if __name__ == "__main__":
-    # for scheme in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO", "EAGER_WRITE"]:
-    #   for contention in [0.0]:#, 0.1, 0.5, 0.99]:
-    #     for read_ratio in [0]:#, 30, 50, 70, 100]:
-    #       thread_num = 24
-    #     insert_ratio = 0
-    #     update_ratio = 100 - read_ratio
-    #     bootstrap_peloton(scheme)
-    #     prepare_parameters()
-    #     start_bench()
-    #     collect_data()
-    #     stop_peloton()
+    for scheme in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO", "EAGER_WRITE"]:
+      for contention in [0.0, 0.1, 0.5, 0.99]:
+        for read_ratio in [0, 30, 50, 70, 100]:
+          thread_num = 24
+        insert_ratio = 0
+        update_ratio = 100 - read_ratio
+        bootstrap_peloton()
+        prepare_parameters()
+        start_bench()
+        collect_data()
+        stop_peloton()
 
     for scheme in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO", "EAGER_WRITE"]:
-      for contention in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]:
+      for contention in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]:
         insert_ratio = 0
         update_ratio = 0
         read_ratio = 0
