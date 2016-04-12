@@ -52,6 +52,7 @@ def prepare_parameters(scheme, contention, thread_num, read_ratio, insert_ratio,
     parameters["$READ_RATIO"] = str(read_ratio)
     parameters["$INSERT_RATIO"] = str(insert_ratio)
     parameters["$UPDATE_RATIO"] = str(update_ratio)
+    parameters["$IP"] = PELOTON_HOST
     ycsb_template = ""
     with open("ycsb_template.xml") as in_file:
         ycsb_template = in_file.read()
