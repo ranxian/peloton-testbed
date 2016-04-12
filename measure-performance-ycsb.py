@@ -84,8 +84,8 @@ def start_bench(scheme, contention, thread_num, read_ratio, insert_ratio, update
 
 def stop_peloton():
     # go back to cwd
-    os.chdir(cwd)
-    os.system(stop_peloton_script)
+    cmd = "ssh %s@%s -t 'bash -l -c \"%s\"'" % (PELOTON_USER, PELOTON_HOST, stop_peloton_script)
+    call(cmd, shell=True)
 
 def collect_data(scheme, contention, thread_num, read_ratio, insert_ratio, update_ratio):
     os.chdir(cwd)
@@ -108,10 +108,11 @@ if __name__ == "__main__":
     for scheme in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
       for contention in [0.0]:#, 0.1, 0.5, 0.99]:
         for read_ratio in [0]:#, 30, 50, 70, 100]:
-          for thread_num in range(12, 12+1):
+          for thread_num in range(20, 20+1):
             insert_ratio = 0
             update_ratio = 100 - read_ratio
             bootstrap_peloton(scheme)
             prepare_parameters(scheme, contention, thread_num, read_ratio, insert_ratio, update_ratio)
             start_bench(scheme, contention, thread_num, read_ratio, insert_ratio, update_ratio)
             collect_data(scheme, contention, thread_num, read_ratio, insert_ratio, update_ratio)
+            stop_peloton()
