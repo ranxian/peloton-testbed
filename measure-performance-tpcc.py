@@ -44,6 +44,7 @@ payment_ratio = 0
 order_status_ratio = 0
 delivery_ratio = 0
 stock_level_ratio = 0
+scale_factor = 1
 
 start_cleanup_script = "rm -rf callgrind.out.*"
 start_peloton_valgrind_script = "valgrind --tool=callgrind --trace-children=yes %s/peloton -D ./data > /dev/null 2>&1 &" % (PELOTON_BIN)
@@ -63,6 +64,7 @@ def prepare_parameters():
     parameters["$ORDER_STATUS_RATIO"] = str(order_status_ratio)
     parameters["$DELIVERY_RATIO"] = str(delivery_ratio)
     parameters["$STOCK_LEVEL_RATIO"] = str(stock_level_ratio)
+    parameters["$SCALE_FACTOR"] = str(scale_factor)
     parameters["$IP"] = PELOTON_HOST
 
     template = ""
@@ -75,7 +77,7 @@ def prepare_parameters():
 
 def get_result_path():
   global cwd
-  return "%s/outputfile_%s_%d_%d_%d_%d_%d" % (cwd, scheme, new_order_ratio, payment_ratio, order_status_ratio, delivery_ratio, stock_level_ratio)
+  return "%s/outputfile_%s_%d_%d_%d_%d_%d_%d" % (cwd, scheme, new_order_ratio, payment_ratio, order_status_ratio, delivery_ratio, stock_level_ratio, scale_factor)
 
 def start_peloton_valgrind():
     os.chdir(cwd)
@@ -99,7 +101,7 @@ def stop_peloton():
 
 def collect_data():
     os.chdir(cwd)
-    dir_name = "tpcc_collected_data_%s_%d_%d_%d_%d_%d" % (scheme, new_order_ratio, payment_ratio, order_status_ratio, delivery_ratio, stock_level_ratio)
+    dir_name = "tpcc_collected_data_%s_%d_%d_%d_%d_%d_%d" % (scheme, new_order_ratio, payment_ratio, order_status_ratio, delivery_ratio, stock_level_ratio, scale_factor)
     os.system("rm -rf " + dir_name)
     os.system("mkdir " + dir_name)
     os.system("mv callgrind.out.* " + dir_name)
@@ -127,16 +129,18 @@ if __name__ == "__main__":
     # stop_peloton()
 
     for scheme in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
-        for setting in [(100, 0), (50, 50)]:
-            new_order_ratio, payment_ratio = setting
-            order_status_ratio = 0
-            delivery_ratio = 0
-            stock_level_ratio = 0
+        for sf in [1, 4, 8, 12]:
+            scale_factor = sf
+            for setting in [(100, 0)]:
+                new_order_ratio, payment_ratio = setting
+                order_status_ratio = 0
+                delivery_ratio = 0
+                stock_level_ratio = 0
 
-            thread_num = 20
+                thread_num = 24
 
-            bootstrap_peloton()
-            prepare_parameters()
-            start_bench()
-            collect_data()
-            stop_peloton()
+                bootstrap_peloton()
+                prepare_parameters()
+                start_bench()
+                collect_data()
+                stop_peloton()
