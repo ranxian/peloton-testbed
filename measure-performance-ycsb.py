@@ -105,7 +105,7 @@ def bootstrap_peloton(scheme):
 # Cont: 0, 0.1, 0.3, 0.5, 0.9, 0.99
 # Thr: 1-12
 if __name__ == "__main__":
-    for scheme in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECLATIVE_READ", "TO"]:
+    for scheme in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
       for contention in [0.0]:#, 0.1, 0.5, 0.99]:
         for read_ratio in [0]:#, 30, 50, 70, 100]:
           for thread_num in range(12, 12+1):
