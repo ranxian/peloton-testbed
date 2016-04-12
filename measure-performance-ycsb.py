@@ -65,7 +65,7 @@ def prepare_parameters(scheme, contention, thread_num, read_ratio, insert_ratio,
 
 def get_result_path(scheme, contention, thread_num, read_ratio, insert_ratio, update_ratio):
   global cwd
-  return "%s/outputfile_[%s]_%.2f_%d_%d_%d_t%d" % (cwd, scheme, contention, read_ratio, insert_ratio, update_ratio, thread_num)
+  return "%s/outputfile_%s_%.2f_%d_%d_%d_t%d" % (cwd, scheme, contention, read_ratio, insert_ratio, update_ratio, thread_num)
 
 def start_peloton_valgrind():
     os.chdir(cwd)
@@ -89,7 +89,7 @@ def stop_peloton():
 
 def collect_data(scheme, contention, thread_num, read_ratio, insert_ratio, update_ratio):
     os.chdir(cwd)
-    dir_name = "ycsb_collected_data" + "_[" + scheme + "]_"+ "%.2f" % (contention) + "_" + str(read_ratio) + "_" + str(insert_ratio) + "_" + str(update_ratio) + "_" + str(thread_num)
+    dir_name = "ycsb_collected_data" + "_" + scheme + "_"+ "%.2f" % (contention) + "_" + str(read_ratio) + "_" + str(insert_ratio) + "_" + str(update_ratio) + "_" + str(thread_num)
     os.system("rm -rf " + dir_name)
     os.system("mkdir " + dir_name)
     os.system("mv callgrind.out.* " + dir_name)
