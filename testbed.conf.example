@@ -1,3 +1,4 @@
+[peloton]
 # The repository of peloton source code
 PELOTON_SRC=~/peloton
 # The directory to put all the built binaries, you should configure peloton like
@@ -6,6 +7,6 @@ PELOTON_BIN=~/
 # Branch of the peloton source code
 PELOTON_BRANCH=master
 # Host of the peloton server
- PELOTON_HOST=localhost
+PELOTON_HOST=localhost
 # # User to login to the peloton server
- PELOTON_USER=user
+PELOTON_USER=user

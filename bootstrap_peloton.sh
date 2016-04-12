@@ -9,16 +9,6 @@ git submodule foreach git pull origin master
 # Compile oltp benchmark
 (cd $pwd/oltpbench; ant)
 
-# The repository of peloton source code
-PELOTON_SRC=~/peloton/iso_peloton_bench
-# The directory to put all the built binaries, you should configure peloton like
-# ../configure --prefix=~/bin
-PELOTON_BIN=~/peloton
-# Branch of the peloton source code
-PELOTON_BRANCH=master
-# Host of the peloton server
-PELOTON_HOST=localhost
-
 while IPS= read -r line; do
     first=`echo $line | head -c 1`
     if [ "$first" != "#" ] && [ "$line" != "[peloton]" ]; then
@@ -32,7 +22,7 @@ cd $PELOTON_SRC/build/
 git checkout $PELOTON_BRANCH
 git pull origin $PELOTON_BRANCH
 # Change the protocol
-sed -i "s/CONCURRENCY_TYPE_.*/CONCURRENCY_TYPE_$protocol;/" ~/peloton/iso_peloton_bench/src/backend/concurrency/transaction_manager_factory.cpp
+sed -i "s/CONCURRENCY_TYPE_.*/CONCURRENCY_TYPE_$protocol;/" $PELOTON_SRC/src/backend/concurrency/transaction_manager_factory.cpp
 
 make -j
 make install
