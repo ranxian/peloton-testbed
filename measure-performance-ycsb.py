@@ -76,6 +76,7 @@ def start_peloton_valgrind():
 def start_bench(scheme, contention, thread_num, read_ratio, insert_ratio, update_ratio):
     # go to oltpbench directory
     os.chdir(os.path.expanduser(OLTP_HOME))
+    call("ant", shell=True)
     cmd = start_ycsb_bench_script + get_result_path(scheme, contention, read_ratio, insert_ratio, update_ratio, thread_num)
     process = subprocess.Popen(cmd, shell=True)
     process.wait()
