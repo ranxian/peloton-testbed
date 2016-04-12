@@ -16,9 +16,10 @@
         <work>
           <time>$TIME</time>
           <rate>unlimited</rate>
-          <weights>$READ_RATIO,$INSERT_RATIO,$SCAN_RATIO,$UPDATE_RATIO,$DELETE_RATIO,$RMW_RATIO</weights>
+          <weights>$READ_RATIO,$INSERT_RATIO,$SCAN_RATIO,$UPDATE_RATIO,$DELETE_RATIO,$RMW_RATIO,$MR_RATIO</weights>
         </work>
     </works>
+
     <!-- YCSB Procedures declaration -->
     <transactiontypes>
         <transactiontype>
@@ -39,5 +40,9 @@
         <transactiontype>
                 <name>ReadModifyWriteRecord</name>
         </transactiontype>
+        <transactiontype>
+                <name>MultipleRecord</name>
+        </transactiontype>
     </transactiontypes>
+    
 </parameters>
