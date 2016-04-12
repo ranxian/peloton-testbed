@@ -27,7 +27,7 @@ OLTP_HOME = "%s/oltpbench" % (cwd)
 parameters = {
 "$IP":  "localhost",
 "$PORT": "57721",
-"$SCALE_FACTOR": "1",
+"$SCALE_FACTOR": "20",
 "$TIME":  "10",
 "$THREAD_NUMBER": "1",
 "$READ_RATIO": "0",
