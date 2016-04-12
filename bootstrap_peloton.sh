@@ -1,8 +1,13 @@
 #!/bin/bash
 # This script will compile and run peloton
 
+protocol=${1:-PESSIMISTIC}
+pwd=`pwd`
 # Pull latest testbed
 git pull origin master
+git submodule foreach git pull origin master
+# Compile oltp benchmark
+(cd $pwd/oltpbench; ant)
 
 # The repository of peloton source code
 PELOTON_SRC=~/peloton/iso_peloton_bench
@@ -21,13 +26,14 @@ while IPS= read -r line; do
     fi
 done < "testbed.conf"
 
-pwd=`pwd`
-
 rm -rf data
 # Rebuild and install
 cd $PELOTON_SRC/build/
 git checkout $PELOTON_BRANCH
 git pull origin $PELOTON_BRANCH
+# Change the protocol
+sed -i "s/CONCURRENCY_TYPE_.*/CONCURRENCY_TYPE_$protocol;/" ~/peloton/iso_peloton_bench/src/backend/concurrency/transaction_manager_factory.cpp
+
 make -j
 make install
 
@@ -49,7 +55,7 @@ rm data/pg_log/peloton.log
 
 # Start the peloton server
 echo "Starting peloton"
-$PELOTON_BIN/bin/peloton -D ./data & # > /dev/null 2>&1 &
+screen -dm $PELOTON_BIN/bin/peloton -D ./data  # > /dev/null 2>&1 &
 
 # Wait for a moment for the server to start up...
 sleep 2
@@ -66,8 +72,4 @@ echo "create database ycsb;" | $PELOTON_BIN/bin/psql postgres
 echo "create database tpcc;" | $PELOTON_BIN/bin/psql postgres
 
 echo "Peloton prepared"
-$PELOTON_BIN/bin/pg_ctl -D ./data stop
-
-# Compile oltp benchmark
-(cd $pwd/oltpbench; ant)
-
+# $PELOTON_BIN/bin/pg_ctl -D ./data stop

@@ -5,3 +5,7 @@ PELOTON_SRC=~/peloton
 PELOTON_BIN=~/
 # Branch of the peloton source code
 PELOTON_BRANCH=master
+# Host of the peloton server
+ PELOTON_HOST=localhost
+# # User to login to the peloton server
+ PELOTON_USER=user
