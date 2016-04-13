@@ -98,6 +98,8 @@ def start_bench():
 
 def stop_peloton():
     # go back to cwd
+    cmd = "pkill -9 peloton"
+    call(cmd, shell=True)
     cmd = "ssh %s@%s -t 'bash -l -c \"%s\"'" % (PELOTON_USER, PELOTON_HOST, stop_peloton_script)
     call(cmd, shell=True)
 
