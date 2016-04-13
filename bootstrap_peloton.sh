@@ -45,7 +45,7 @@ rm data/pg_log/peloton.log
 
 # Start the peloton server
 echo "Starting peloton"
-screen -dm bash -l -c "$PELOTON_BIN/bin/peloton -D ./data"  # > /dev/null 2>&1 &
+screen -dm bash -l -c "$PELOTON_BIN/bin/peloton -D ./data > ./data/peloton_log.txt 2>&1"  # > /dev/null 2>&1 &
 
 # Wait for a moment for the server to start up...
 sleep 2
