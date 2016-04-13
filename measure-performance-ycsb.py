@@ -71,7 +71,7 @@ def prepare_parameters():
     with open(config_filename, "w") as out_file:
         out_file.write(ycsb_template)
 
-    os.system("sed -i 's/ZIPFIAN_CONSTANT=.*?;/ZIPFIAN_CONSTANT=%f;/' %s" % (contention, OLTP_HOME + "/src/com/oltpbenchmark/distributions/ZipfianGenerator.java"))
+    os.system("sed -i 's/ZIPFIAN_CONSTANT=.*\?;/ZIPFIAN_CONSTANT=%.5f;/' %s" % (contention, OLTP_HOME + "/src/com/oltpbenchmark/distributions/ZipfianGenerator.java"))
 
 def get_result_path():
   global cwd
