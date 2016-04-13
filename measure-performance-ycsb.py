@@ -107,6 +107,12 @@ def collect_data():
     os.system("mv callgrind.out.* " + dir_name)
     os.system("mv %s.* %s/" % (get_result_path(), dir_name))
 
+    # Download peloton log
+    cmd = "scp %s@%s:~/peloton-testbed/data/peloton_log.txt %s/peloton.log"  \
+        % (PELOTON_USER, PELOTON_HOST, dir_name)
+
+    call(cmd, shell=True)
+
 def bootstrap_peloton():
     shell_cmd = "cd ~/peloton-testbed/; bash bootstrap_peloton.sh " + scheme
     cmd = "ssh %s@%s -t 'bash -l -c \"%s\"'" % (PELOTON_USER, PELOTON_HOST, shell_cmd)
@@ -129,8 +135,8 @@ if __name__ == "__main__":
           bootstrap_peloton()
           prepare_parameters()
           start_bench()
-          collect_data()
           stop_peloton()
+          collect_data()
 
     for s in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO", "EAGER_WRITE"]:
       for c in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]:
@@ -143,5 +149,5 @@ if __name__ == "__main__":
         bootstrap_peloton()
         prepare_parameters()
         start_bench()
-        collect_data()
         stop_peloton()
+        collect_data()
