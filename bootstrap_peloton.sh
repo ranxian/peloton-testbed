@@ -20,7 +20,7 @@ rm -rf data
 # Rebuild and install
 cd $PELOTON_SRC/build/
 git reset --hard
-git fetch $PELOTON_BRANCH
+git fetch origin $PELOTON_BRANCH
 git checkout $PELOTON_BRANCH
 git pull origin $PELOTON_BRANCH
 # Change the protocol
