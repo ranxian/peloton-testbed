@@ -54,7 +54,7 @@ start_peloton_script = "%s/peloton -D ~/peloton-testbed/data > /dev/null 2>&1 &"
 stop_peloton_script = "%s/pg_ctl -D ~/peloton-testbed/data stop" % (PELOTON_BIN)
 
 config_filename = "peloton_tpcc_config.xml"
-start_benchmark_script = "%s/oltpbenchmark -b tpcc -c " % (OLTP_HOME) + cwd + "/" + config_filename + " --create=true --load=true --execute=true -s 5 -o "
+start_benchmark_script = "%s/oltpbenchmark -b tpcc -c " % (OLTP_HOME) + cwd + "/" + config_filename + " --histograms  --create=true --load=true --execute=true -s 5 -o "
 
 def prepare_parameters():
     os.chdir(cwd)
@@ -92,7 +92,7 @@ def start_bench():
     call("git pull origin master", shell=True)
     call("ant clean", shell=True)
     call("ant", shell=True)
-    cmd = start_benchmark_script + get_result_path()
+    cmd = start_ycsb_bench_script + get_result_path() + " 2>&1 | tee > %s.log" % (get_result_path())
     process = subprocess.Popen(cmd, shell=True)
     process.wait()
 
