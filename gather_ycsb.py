@@ -9,7 +9,7 @@ def get_throughput(dir_name, file_name):
     return float(result.group(1))
 
 print ",".join(["Protocol", "Contention", "Read", "Write", "MR", "RPS"])
-for protocol in ["OPTIMISTIC"]:
+for protocol in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "TO", "SPECULATIVE_READ", "EAGER_WRITE"]:
     for contention in ["0.00", "0.10", "0.20", "0.30", "0.40", "0.50", "0.60", "0.70", "0.80", "0.90", "0.99"]:
         for read_ratio in ["0", "30", "50", "70", "100"]:
             dir_name = "ycsb_collected_data_%s_%s_%s_%s_%s_%s" % (protocol, contention, read_ratio, "0", str(100-int(read_ratio)), "0")
