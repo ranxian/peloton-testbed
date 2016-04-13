@@ -130,7 +130,8 @@ if __name__ == "__main__":
     # collect_data()
     # stop_peloton()
 
-    for scheme in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
+    for s in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
+        scheme = s
         for sf in [1, 4, 8, 12]:
             scale_factor = sf
             for setting in [(100, 0)]:
