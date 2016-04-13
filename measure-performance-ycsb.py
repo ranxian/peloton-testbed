@@ -87,6 +87,7 @@ def start_peloton_valgrind():
 def start_bench():
     # go to oltpbench directory
     os.chdir(os.path.expanduser(OLTP_HOME))
+    call("git pull origin master", shell=True)
     call("ant clean", shell=True)
     call("ant", shell=True)
     cmd = start_ycsb_bench_script + get_result_path()

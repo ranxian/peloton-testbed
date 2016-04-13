@@ -8,5 +8,6 @@ PELOTON_BIN=~/
 PELOTON_BRANCH=master
 # Host of the peloton server
 PELOTON_HOST=localhost
-# # User to login to the peloton server
+# User to login to the peloton server. The benchmark script will execute remote 
+# command like `ssh PELOTON_USER@PELOTON_HOST bash -l -c "<CMD>"'
 PELOTON_USER=user
