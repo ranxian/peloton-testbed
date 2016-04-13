@@ -50,7 +50,7 @@ thread_num = 24
 start_cleanup_script = "rm -rf callgrind.out.*"
 start_peloton_valgrind_script = "valgrind --tool=callgrind --trace-children=yes %s/peloton -D ./data > /dev/null 2>&1 &" % (PELOTON_BIN)
 start_peloton_script = "%s/peloton -D ~/peloton-testbed/data > /dev/null 2>&1 &" % (PELOTON_BIN)
-stop_peloton_script = "%s/pg_ctl -D ~/peloton-testbed/data stop" % (PELOTON_BIN)
+stop_peloton_script = "%s/pg_ctl -t 2 -D ~/peloton-testbed/data stop" % (PELOTON_BIN)
 
 config_filename = "peloton_ycsb_config.xml"
 start_ycsb_bench_script = "%s/oltpbenchmark -b ycsb -c " % (OLTP_HOME) + cwd + "/" + config_filename + " --histograms --create=true --load=true --execute=true -s 5 -o "
@@ -123,8 +123,14 @@ def bootstrap_peloton():
 # Cont: 0, 0.1, 0.3, 0.5, 0.9, 0.99
 # Thr: 1-12
 if __name__ == "__main__":
-    for s in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO", "EAGER_WRITE"]:
-      for c in [0.0, 0.1, 0.5, 0.99]:
+    
+    """
+    for s in ["OPTIMISTIC", "SSI", "SPECULATIVE_READ", "TO", "PESSIMISTIC"]:
+      for c in [0.0, 0.2, 0.5, 0.7, 0.99]:
+        for rr in [0, 30, 50, 70, 100]:
+        """
+    for s in ["OPTIMISTIC"]:
+      for c in [0.0, 0.2, 0.5, 0.7, 0.99]:
         for rr in [0, 30, 50, 70, 100]:
           scheme = s
           contention = c
@@ -137,9 +143,11 @@ if __name__ == "__main__":
           start_bench()
           stop_peloton()
           collect_data()
+          
 
-    for s in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO", "EAGER_WRITE"]:
-      for c in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]:
+"""
+    for s in ["SSI", "SPECULATIVE_READ", "TO", "EAGER_WRITE"]:
+      for c in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]:
         scheme = s
         contention = c
         insert_ratio = 0
@@ -151,3 +159,4 @@ if __name__ == "__main__":
         start_bench()
         stop_peloton()
         collect_data()
+        """

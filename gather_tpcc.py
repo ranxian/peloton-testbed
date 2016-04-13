@@ -1,4 +1,5 @@
 import os
+import re
 
 
 def get_throughput(dir_name, file_name):
@@ -27,3 +28,4 @@ for protocol in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "TO", "SPECULATIVE_READ", "
             rps = get_throughput(dir_name, file_name)
             abt_rate = get_abort_rate(dir_name)
             print ','.join([protocol, str(scale), "100", "0", str(rps), "%.3f" % (abt_rate * 100)])
+            # print ','.join([protocol, str(scale), "100", "0", str(rps)])

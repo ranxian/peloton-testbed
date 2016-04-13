@@ -51,7 +51,7 @@ start_peloton_valgrind_script = "valgrind --tool=callgrind --trace-children=yes 
 
 # Requires that peloton-testbed is in the home directory
 start_peloton_script = "%s/peloton -D ~/peloton-testbed/data > /dev/null 2>&1 &" % (PELOTON_BIN)
-stop_peloton_script = "%s/pg_ctl -D ~/peloton-testbed/data stop" % (PELOTON_BIN)
+stop_peloton_script = "%s/pg_ctl -t 2 -D ~/peloton-testbed/data stop" % (PELOTON_BIN)
 
 config_filename = "peloton_tpcc_config.xml"
 start_benchmark_script = "%s/oltpbenchmark -b tpcc -c " % (OLTP_HOME) + cwd + "/" + config_filename + " --histograms  --create=true --load=true --execute=true -s 5 -o "
@@ -92,7 +92,8 @@ def start_bench():
     call("git pull origin master", shell=True)
     call("ant clean", shell=True)
     call("ant", shell=True)
-    cmd = start_ycsb_bench_script + get_result_path() + " 2>&1 | tee > %s.log" % (get_result_path())
+    cmd = start_benchmark_script + get_result_path() + " 2>&1 | tee > %s.log" % (get_result_path())
+    # cmd = start_benchmark_script + get_result_path()
     process = subprocess.Popen(cmd, shell=True)
     process.wait()
 
@@ -136,9 +137,9 @@ if __name__ == "__main__":
     # collect_data()
     # stop_peloton()
 
-    for s in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
+    for s in ["TO"]: #["PESSIMISTIC", "OPTIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
         scheme = s
-        for sf in [1, 4, 8, 12]:
+        for sf in [12]:
             scale_factor = sf
             for setting in [(100, 0)]:
                 new_order_ratio, payment_ratio = setting

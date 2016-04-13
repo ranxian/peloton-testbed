@@ -2,4 +2,6 @@ testbed.conf
 data/
 output*
 peloton_ycsb_config.xml
+peloton_tpcc_config.xml
 ycsb_collected_*
+tpcc_collected_*

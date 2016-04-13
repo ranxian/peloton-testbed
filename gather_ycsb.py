@@ -25,7 +25,8 @@ for protocol in ["OPTIMISTIC", "PESSIMISTIC", "SSI", "TO", "SPECULATIVE_READ", "
             file_name = "outputfile_%s_%s_%s_%s_%s_%s.log" % (protocol, contention, read_ratio, "0", str(100 - int(read_ratio)), "0")
             if os.path.exists("%s/%s" % (dir_name, file_name)):
                 rps = get_throughput(dir_name, file_name)
-                print ','.join([protocol, contention, read_ratio, str(100-int(read_ratio)), "0", str(rps)])
+                abt_rate = get_abort_rate(dir_name)
+                print ','.join([protocol, contention, read_ratio, str(100-int(read_ratio)), "0", str(rps), "%.3f" % (abt_rate * 100)])
 
         dir_name = "ycsb_collected_data_%s_%s_0_0_0_100" % (protocol, contention)
         file_name = "outputfile_%s_%s_0_0_0_100.log" % (protocol, contention)
