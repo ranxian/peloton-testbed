@@ -47,8 +47,8 @@ rm data/pg_log/peloton.log
 echo "Starting peloton"
 # screen -dm bash -l -c "valgrind --trace-children=yes --track-origins=yes $PELOTON_BIN/bin/peloton -D ./data > ./data/peloton_log.txt 2>&1"  # > /dev/null 2>&1 &
 # screen -dm bash -l -c "valgrind --trace-children=yes --track-origins=yes --args $PELOTON_BIN/bin/peloton -D ./data > ./data/peloton_log.txt 2>&1"  # > /dev/null 2>&1 &
-# screen -dm bash -l -c "valgrind --tool=callgrind --trace-children=yes $PELOTON_BIN/bin/peloton -D ./data"  # > /dev/null 2>&1 &
-screen -dm bash -l -c "$PELOTON_BIN/bin/peloton -D ./data"
+screen -dm bash -l -c "valgrind --tool=callgrind --trace-children=yes $PELOTON_BIN/bin/peloton -D ./data"  # > /dev/null 2>&1 &
+# screen -dm bash -l -c "$PELOTON_BIN/bin/peloton -D ./data"
 
 # Wait for a moment for the server to start up...
 sleep 2

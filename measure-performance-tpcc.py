@@ -26,7 +26,7 @@ parameters = {
 "$IP":  "localhost",
 "$PORT": "57721",
 "$SCALE_FACTOR": "1",
-"$TIME":  "10",
+"$TIME":  "600",
 "$THREAD_NUMBER": "1",
 "$READ_RATIO": "0",
 "$INSERT_RATIO": "0",
@@ -54,7 +54,8 @@ start_peloton_script = "%s/peloton -D ~/peloton-testbed/data > /dev/null 2>&1 &"
 stop_peloton_script = "%s/pg_ctl -t 2 -D ~/peloton-testbed/data stop" % (PELOTON_BIN)
 
 config_filename = "peloton_tpcc_config.xml"
-start_benchmark_script = "%s/oltpbenchmark -b tpcc -c " % (OLTP_HOME) + cwd + "/" + config_filename + " --histograms  --create=true --load=true --execute=true -s 5 -o "
+# start_benchmark_script = "%s/oltpbenchmark -b tpcc -c " % (OLTP_HOME) + cwd + "/" + config_filename + " --histograms  --create=true --load=true --execute=false -s 5 -o "
+start_benchmark_script = "%s/oltpbenchmark -b tpcc -c " % (OLTP_HOME) + cwd + "/" + config_filename + " --histograms --execute=true -s 5 -o "
 
 def prepare_parameters():
     os.chdir(cwd)
@@ -89,9 +90,9 @@ def start_peloton_valgrind():
 def start_bench():
     # go to oltpbench directory
     os.chdir(os.path.expanduser(OLTP_HOME))
-    call("git pull origin master", shell=True)
-    call("ant clean", shell=True)
-    call("ant", shell=True)
+    #call("git pull origin master", shell=True)
+    #call("ant clean", shell=True)
+    #call("ant", shell=True)
     cmd = start_benchmark_script + get_result_path() + " 2>&1 | tee > %s.log" % (get_result_path())
     # cmd = start_benchmark_script + get_result_path()
     process = subprocess.Popen(cmd, shell=True)
@@ -137,7 +138,7 @@ if __name__ == "__main__":
     # collect_data()
     # stop_peloton()
 
-    for s in ["TO"]: #["PESSIMISTIC", "OPTIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
+    for s in ["OPTIMISTIC"]: #["PESSIMISTIC", "OPTIMISTIC", "SSI", "SPECULATIVE_READ", "TO"]:
         scheme = s
         for sf in [12]:
             scale_factor = sf
@@ -149,8 +150,8 @@ if __name__ == "__main__":
 
                 thread_num = 24
 
-                bootstrap_peloton()
+                # bootstrap_peloton()
                 prepare_parameters()
                 start_bench()
-                stop_peloton()
+                # stop_peloton()
                 collect_data()
